@@ -1,14 +1,14 @@
-import React, { useRef, useEffect } from 'react'
-import { TypingDetector } from '../../components/typing-detector'
-import { preventSelection } from './prevent-selection'
-import { Toolbar } from '../../components/toolbar'
-import { ToolbarButton } from '../../components/toolbar-button'
+import classNames from 'classnames'
+import React, { useEffect, useRef } from 'react'
 import { Icon } from '../../components/icon'
 import { Icons } from '../../components/icons'
-import classNames from 'classnames'
-import { UserSettingsTheme } from '../../reducers/user-settings'
 import { Spacer } from '../../components/spacer'
 import { Toast } from '../../components/toast'
+import { Toolbar } from '../../components/toolbar'
+import { ToolbarButton } from '../../components/toolbar-button'
+import { TypingDetector } from '../../components/typing-detector'
+import { UserSettingsTheme } from '../../reducers/user-settings'
+import { preventSelection } from './prevent-selection'
 
 const preventEvent = (e: React.SyntheticEvent) => e.preventDefault()
 
@@ -56,6 +56,16 @@ export const EditorViewPresenter = ({
     const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
         onChange(e.currentTarget.value)
 
+    const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (
+            e.key === 'Backspace' &&
+            value.at(-1) === '\n' &&
+            value.at(-2) !== '\n'
+        ) {
+            e.preventDefault()
+        }
+    }
+
     const focus = () => inputEl.current?.focus()
 
     useEffect(() => {
@@ -89,6 +99,7 @@ export const EditorViewPresenter = ({
                     className='editor__input'
                     placeholder='Start typing...'
                     value={getFormattedText(value)}
+                    onKeyDown={onKeyDown}
                     onChange={onInputChange}
                     dir='auto'
                 />

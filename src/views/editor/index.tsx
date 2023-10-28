@@ -2,7 +2,6 @@ import React, { Dispatch, useEffect, useState } from 'react'
 import { showToast } from '../../components/toast'
 import { Action, UserSettings } from '../../reducers/user-settings'
 import { Fullscreen } from '../../utils/fullscreen'
-import { trackVisits } from '../../utils/track-visits'
 import { useFullscreen } from '../../utils/use-fullscreen'
 import { download } from './download'
 import { getFilename } from './get-filename'
@@ -49,10 +48,6 @@ export const EditorView = ({ state, dispatch }: EditorViewProps) => {
             type: 'user:change-theme',
             theme: state.theme === 'dark' ? 'default' : 'dark',
         })
-
-    useEffect(() => {
-        trackVisits()
-    }, [])
 
     useEffect(() => {
         let timer: number
